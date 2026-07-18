@@ -1,0 +1,200 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, stage]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '20'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ─── Job 1: Lint ────────────────────────────────────────────────────────────
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run ESLint
+        run: npm run lint
+
+  # ─── Job 2: Test ────────────────────────────────────────────────────────────
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: lint
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: jayascravings_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/jayascravings_test
+      REDIS_URL: redis://localhost:6379
+      REDIS_QUEUE_URL: redis://localhost:6379
+      JWT_SECRET: test_jwt_secret_ci
+      JWT_REFRESH_SECRET: test_refresh_secret_ci
+      JWT_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 30d
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: placeholder
+      AWS_SECRET_ACCESS_KEY: placeholder
+      S3_BUCKET: placeholder
+      CLOUDFRONT_URL: http://localhost:3000
+      PAYSTACK_SECRET_KEY: placeholder
+      PAYSTACK_WEBHOOK_SECRET: placeholder
+      RESEND_API_KEY: placeholder
+      EMAIL_FROM: test@test.com
+      FRONTEND_URL: http://localhost:3001
+      GOOGLE_CLIENT_ID: placeholder
+      INTERNAL_API_KEY: placeholder
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run unit tests
+        run: npm test -- --passWithNoTests --coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
+  # ─── Job 3: Build ───────────────────────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  # ─── Job 4: Docker build & push (only on merge to main) ──────────────────
+  docker:
+    name: Docker Build & Push
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=sha-
+            type=raw,value=latest
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          target: production
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha       # GitHub Actions cache — speeds up Docker builds
+          cache-to: type=gha,mode=max
+
+  # ─── Job 5: Deploy to Render (only on merge to main) ─────────────────────
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    needs: docker
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production          # requires manual approval in GitHub environments
+
+    steps:
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" \
+            -H "Accept: application/json"
+
+      - name: Notify deployment
+        run: |
+          echo "✅ Deployed to production at $(date)"
+          echo "Commit: ${{ github.sha }}"
+          echo "Author: ${{ github.actor }}"

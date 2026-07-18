@@ -1,0 +1,1285 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AcceptInviteResult {
+  staff: Staff!
+  user: User!
+}
+
+type Address {
+  city: String!
+  createdAt: Timestamp!
+  id: ID!
+  isDefault: Boolean!
+  label: String!
+  phone: String!
+  postalCode: String
+  recipientName: String!
+  state: String!
+  street: String!
+  updatedAt: Timestamp!
+}
+
+type AuditLog {
+  action: String!
+  after: String
+  before: String
+  createdAt: Timestamp!
+  entity: String!
+  entityId: String
+  id: ID!
+  ipAddress: String
+  performedBy: ID!
+  performedByName: String!
+  userAgent: String
+}
+
+type AuthPayload {
+  accessToken: String!
+  user: User!
+}
+
+type BroadcastPromotionResult {
+  notifiedCount: Int!
+  promoCode: PromoCode!
+}
+
+type Cart {
+  createdAt: Timestamp!
+  id: ID!
+  items: [CartItem!]
+  sessionId: String
+  subtotal: Float!
+  updatedAt: Timestamp!
+  userId: String
+}
+
+type CartItem {
+  createdAt: Timestamp!
+  customisations: String
+  id: ID!
+  productId: ID!
+  productName: String
+  quantity: Int!
+  specialInstructions: String
+  totalPrice: Float!
+  unitPrice: Float!
+  updatedAt: Timestamp!
+  variantId: String
+  variantName: String
+}
+
+type Category {
+  createdAt: Timestamp!
+  description: String
+  id: ID!
+  imageUrl: String
+  isActive: Boolean!
+  name: String!
+  slug: String!
+  sortOrder: Float!
+  updatedAt: Timestamp!
+}
+
+input CreateAddressInput {
+  city: String!
+  isDefault: Boolean! = false
+  label: String!
+  phone: String!
+  postalCode: String
+  recipientName: String!
+  state: String!
+  street: String!
+}
+
+input CreateCustomOrderInput {
+  approximateBudget: String
+  customerNotes: String
+  description: String
+  occasion: String!
+  preferredDeliveryDate: String
+  preferredDeliveryTime: String
+}
+
+input CreateOrderInput {
+  deliveryAddressId: String
+  deliveryCity: String
+  deliveryDate: String
+  deliveryPhone: String
+  deliveryRecipientName: String
+  deliveryState: String
+  deliveryStreet: String
+  deliveryTimeSlot: String
+  deliveryType: DeliveryType!
+  notes: String
+  promoCode: String
+}
+
+input CreateProductInput {
+  basePrice: Float!
+  categoryId: String!
+  description: String
+  isAvailable: Boolean
+  isFeatured: Boolean
+
+  """
+  S3 object keys, in display order. First entry becomes the primary image.
+  """
+  mediaKeys: [String!]
+
+  """CDN URLs, parallel to mediaKeys (same index = same file)."""
+  mediaUrls: [String!]
+  metaDescription: String
+  metaTitle: String
+  name: String!
+  stockCount: Int
+}
+
+input CreateQuoteInput {
+  lineItems: [String!]!
+  message: String
+  requestId: ID!
+  terms: String
+  totalAmount: Float!
+  validUntil: String
+}
+
+type CustomOrderAgreement {
+  adminSigned: Boolean!
+  agreedDeliveryDate: Timestamp
+  agreedLineItems: [String!]!
+  agreedTotal: Float!
+  agreementNumber: String!
+  cakeDescription: String!
+  createdAt: Timestamp!
+  customerEmail: String!
+  customerName: String!
+  customerPhone: String
+  customerSigned: Boolean!
+  deliveryMethod: String
+  id: ID!
+  pdfKey: String
+  pdfUrl: String
+  quoteId: ID!
+  requestId: ID!
+}
+
+type CustomOrderPayment {
+  adminNote: String
+  agreementId: ID!
+  amount: Float!
+  authorizationUrl: String
+  confirmedAt: Timestamp
+  confirmedBy: String
+  createdAt: Timestamp!
+  id: ID!
+  method: CustomPaymentMethod!
+  paidAt: Timestamp
+  paystackReference: String
+  paystackTransactionId: String
+  requestId: ID!
+  status: CustomPaymentStatus!
+  transferProofKey: String
+  transferProofUrl: String
+  transferReference: String
+  updatedAt: Timestamp!
+}
+
+type CustomOrderQuote {
+  createdAt: Timestamp!
+  createdBy: String!
+  customerResponse: String
+  id: ID!
+  lineItems: [String!]!
+  message: String
+  requestId: ID!
+  respondedAt: Timestamp
+  status: QuoteStatus!
+  terms: String
+  totalAmount: Float!
+  updatedAt: Timestamp!
+  validUntil: Timestamp
+  version: Int!
+}
+
+type CustomOrderRequest {
+  adminNotes: String
+  approximateBudget: String
+  assignedTo: String
+  createdAt: Timestamp!
+  customerNotes: String
+  description: String
+  id: ID!
+  mediaKeys: [String!]!
+  mediaUrls: [String!]!
+  occasion: String!
+  preferredDeliveryDate: Timestamp
+  preferredDeliveryTime: String
+  requestNumber: String!
+  status: CustomOrderStatus!
+  updatedAt: Timestamp!
+  userId: ID!
+}
+
+"""Status of a custom cake order request"""
+enum CustomOrderStatus {
+  BAKING
+  CANCELLED
+  DELIVERED
+  IN_PRODUCTION
+  NEGOTIATING
+  PAID
+  PAYMENT_PENDING
+  QUOTE_ACCEPTED
+  QUOTE_SENT
+  READY
+  REJECTED
+  SUBMITTED
+  UNDER_REVIEW
+}
+
+enum CustomPaymentMethod {
+  MANUAL_TRANSFER
+  PAYSTACK
+}
+
+enum CustomPaymentStatus {
+  CONFIRMED
+  FAILED
+  PENDING
+  PROOF_UPLOADED
+  REFUNDED
+}
+
+type CustomerStats {
+  newCustomers: Int!
+  returningCustomers: Int!
+  totalCustomers: Int!
+}
+
+type CustomisationOption {
+  additionalPrice: Float!
+  createdAt: Timestamp!
+  id: ID!
+  isActive: Boolean!
+  isRequired: Boolean!
+  name: String!
+  options: String
+  type: String!
+  updatedAt: Timestamp!
+}
+
+type DashboardSummary {
+  abandonedCarts: Int!
+  customers: CustomerStats!
+  orders: OrderStats!
+  revenue: RevenueOverview!
+  topProducts: [TopProduct!]!
+}
+
+type DeliverySlot {
+  availableDays: [String!]!
+  createdAt: Timestamp!
+  endTime: String!
+  id: ID!
+  isActive: Boolean!
+  label: String!
+  maxOrders: Int!
+  sortOrder: Float!
+  startTime: String!
+  updatedAt: Timestamp!
+}
+
+enum DeliveryType {
+  DELIVERY
+  PICKUP
+}
+
+type DeliveryZone {
+  areas: [String!]!
+  createdAt: Timestamp!
+  deliveryFee: Float!
+  description: String
+  id: ID!
+  isActive: Boolean!
+  name: String!
+  sortOrder: Float!
+  updatedAt: Timestamp!
+}
+
+"""Type of discount applied by a promo code"""
+enum DiscountType {
+  FIXED
+  FREE_DELIVERY
+  PERCENTAGE
+}
+
+input GoogleAuthInput {
+  idToken: String!
+}
+
+input InitiatePaymentInput {
+  method: PaymentMethod!
+  orderId: ID!
+}
+
+type InitiatePaymentResult {
+  authorizationUrl: String!
+  payment: Payment!
+  reference: String!
+}
+
+enum InviteStatus {
+  ACCEPTED
+  EXPIRED
+  PENDING
+  REVOKED
+}
+
+type Mutation {
+  """Accept a staff invite after Google sign-in"""
+  acceptStaffInvite(googleIdToken: String!, token: String!): AcceptInviteResult!
+
+  """Admin: reactivate a staff member"""
+  activateStaff(id: ID!): Staff!
+
+  """Admin: reactivate a suspended account"""
+  activateUser(userId: ID!): User!
+
+  """Add a delivery address"""
+  addAddress(input: CreateAddressInput!): Address!
+
+  """Admin: add a customisation option to a product"""
+  addCustomisationOption(additionalPrice: Float! = 0, isRequired: Boolean! = false, name: String!, options: String, productId: ID!, type: String!): CustomisationOption!
+
+  """Admin: add a product variant"""
+  addProductVariant(additionalPrice: Float! = 0, name: String!, productId: ID!, type: String!): ProductVariant!
+
+  """Add a product to cart"""
+  addToCart(customisations: String, productId: ID!, quantity: Int! = 1, sessionId: String, specialInstructions: String, variantId: ID): Cart!
+
+  """Admin: approve a review"""
+  approveReview(reviewId: ID!): Review!
+
+  """Admin: announce an active promo code to all customers (in-app + push)"""
+  broadcastPromoCode(body: String!, promoCodeId: ID!, title: String!): BroadcastPromotionResult!
+
+  """Admin: bulk update multiple settings at once"""
+  bulkUpdateSettings(keys: [String!]!, values: [String!]!): [Setting!]!
+
+  """Cancel an order"""
+  cancelOrder(orderId: ID!): Order!
+
+  """Clear all items from cart"""
+  clearCart(sessionId: String): Boolean!
+
+  """Clear all read notifications"""
+  clearReadNotifications: Int!
+
+  """Admin: confirm a manual bank transfer payment"""
+  confirmManualTransfer(adminNote: String, paymentId: ID!): CustomOrderPayment!
+
+  """Admin: create a category"""
+  createCategory(description: String, imageUrl: String, name: String!): Category!
+
+  """Submit a custom cake order request"""
+  createCustomOrder(input: CreateCustomOrderInput!, mediaKeys: [String!], mediaUrls: [String!]): CustomOrderRequest!
+
+  """Admin: create a delivery time slot"""
+  createDeliverySlot(availableDays: [String!]!, endTime: String!, label: String!, maxOrders: Int! = 10, startTime: String!): DeliverySlot!
+
+  """Admin: create a delivery zone"""
+  createDeliveryZone(areas: [String!]!, deliveryFee: Float!, description: String, name: String!): DeliveryZone!
+
+  """Create an order from cart"""
+  createOrder(input: CreateOrderInput!): Order!
+
+  """Admin: create a product"""
+  createProduct(input: CreateProductInput!): Product!
+
+  """Admin: create a promo code"""
+  createPromoCode(code: String!, description: String, discountType: DiscountType!, discountValue: Float!, expiresAt: String, maximumDiscount: Float, minimumOrderValue: Float, perUserLimit: Int, startsAt: String, usageLimit: Int): PromoCode!
+
+  """Admin: send a price quote to customer"""
+  createQuote(input: CreateQuoteInput!): CustomOrderQuote!
+
+  """Submit a product review"""
+  createReview(comment: String, mediaKeys: [String!], mediaUrls: [String!], orderId: ID!, productId: ID!, rating: Int!): Review!
+
+  """Admin: deactivate a staff member"""
+  deactivateStaff(id: ID!): Staff!
+
+  """Delete a saved address"""
+  deleteAddress(addressId: ID!): Boolean!
+
+  """Admin: delete a category"""
+  deleteCategory(id: ID!): Boolean!
+
+  """Admin: delete a customisation option"""
+  deleteCustomisationOption(optionId: ID!): Boolean!
+
+  """Admin: delete a delivery slot"""
+  deleteDeliverySlot(id: ID!): Boolean!
+
+  """Admin: delete a delivery zone"""
+  deleteDeliveryZone(id: ID!): Boolean!
+
+  """Delete a notification"""
+  deleteNotification(notificationId: ID!): Boolean!
+
+  """Admin: delete a product"""
+  deleteProduct(id: ID!): Boolean!
+
+  """Admin: delete a product variant"""
+  deleteProductVariant(variantId: ID!): Boolean!
+
+  """Admin: delete a promo code"""
+  deletePromoCode(id: ID!): Boolean!
+
+  """Delete your own review"""
+  deleteReview(reviewId: ID!): Boolean!
+
+  """Admin: permanently delete a staff member"""
+  deleteStaffMember(id: ID!): Boolean!
+
+  """Admin: flag a review"""
+  flagReview(reason: String!, reviewId: ID!): Review!
+
+  """Sign in with Google ID token"""
+  googleAuth(input: GoogleAuthInput!): AuthPayload!
+
+  """Start a Paystack transaction for an order"""
+  initiatePayment(input: InitiatePaymentInput!): InitiatePaymentResult!
+
+  """Log out from current device"""
+  logout: Boolean!
+
+  """Log out from all devices"""
+  logoutAll: Boolean!
+
+  """Mark all notifications as read"""
+  markAllNotificationsRead: Int!
+
+  """Mark a notification as read"""
+  markNotificationRead(notificationId: ID!): Notification!
+
+  """Merge guest cart into user cart after login"""
+  mergeCart(sessionId: String!): Cart!
+
+  """Refresh access token using cookie"""
+  refreshToken: AuthPayload!
+
+  """Admin: reject a review"""
+  rejectReview(reviewId: ID!): Review!
+
+  """Remove an item from cart"""
+  removeFromCart(cartItemId: ID!, sessionId: String): Cart!
+
+  """Reorder from a past order"""
+  reorder(orderId: ID!): Order!
+
+  """Admin: resend a staff invite"""
+  resendStaffInvite(inviteId: ID!): StaffInvite!
+
+  """Respond to a quote — accept, reject or negotiate"""
+  respondToQuote(input: RespondToQuoteInput!): CustomOrderQuote!
+
+  """Admin: respond to a review"""
+  respondToReview(response: String!, reviewId: ID!): Review!
+
+  """Admin: revoke a pending invite"""
+  revokeStaffInvite(inviteId: ID!): StaffInvite!
+
+  """Admin: send a staff invite email"""
+  sendStaffInvite(department: String, email: String!, fullName: String!, role: UserRole!): StaffInvite!
+
+  """Set an address as default"""
+  setDefaultAddress(addressId: ID!): Address!
+
+  """Admin: suspend a customer account"""
+  suspendUser(userId: ID!): User!
+
+  """Admin: toggle product availability"""
+  toggleProductAvailability(id: ID!): Product!
+
+  """Admin: toggle featured status"""
+  toggleProductFeatured(id: ID!): Product!
+
+  """Admin: toggle promo code active status"""
+  togglePromoCode(id: ID!): PromoCode!
+
+  """Update cart item quantity (0 = remove)"""
+  updateCartItem(cartItemId: ID!, quantity: Int!, sessionId: String): Cart!
+
+  """Admin: update custom order request status"""
+  updateCustomOrderStatus(adminNotes: String, assignedTo: String, requestId: ID!, status: CustomOrderStatus!): CustomOrderRequest!
+
+  """Admin: update a delivery slot"""
+  updateDeliverySlot(availableDays: [String!], id: ID!, isActive: Boolean, label: String, maxOrders: Int): DeliverySlot!
+
+  """Admin: update a delivery zone"""
+  updateDeliveryZone(areas: [String!], deliveryFee: Float, id: ID!, isActive: Boolean, name: String): DeliveryZone!
+
+  """Register/clear this device's FCM push token"""
+  updateFcmToken(fcmToken: String): Boolean!
+
+  """Admin: update order status"""
+  updateOrderStatus(input: UpdateOrderStatusInput!): Order!
+
+  """Admin: update a product"""
+  updateProduct(input: UpdateProductInput!): Product!
+
+  """Update current user profile"""
+  updateProfile(input: UpdateUserInput!): User!
+
+  """Update your own review"""
+  updateReview(comment: String, rating: Int, reviewId: ID!): Review!
+
+  """Admin: update a single setting"""
+  updateSetting(key: String!, value: String!): Setting!
+
+  """Admin: update staff details"""
+  updateStaffMember(department: String, fullName: String, id: ID!, phone: String): Staff!
+
+  """Admin: update staff role"""
+  updateStaffRole(id: ID!, role: UserRole!): Staff!
+
+  """Upload bank transfer proof for a custom order payment"""
+  uploadTransferProof(paymentId: ID!, proofKey: String!, proofUrl: String!, transferReference: String): CustomOrderPayment!
+
+  """Manually verify a payment (e.g. after the Paystack redirect callback)"""
+  verifyPayment(reference: String!): Payment!
+}
+
+type Notification {
+  actionUrl: String
+  body: String!
+  createdAt: Timestamp!
+  id: ID!
+  imageUrl: String
+  isRead: Boolean!
+  readAt: Timestamp
+  referenceId: String
+  referenceType: String
+  title: String!
+  type: NotificationType!
+  userId: ID!
+}
+
+type NotificationSummary {
+  unreadCount: Int!
+}
+
+enum NotificationType {
+  CUSTOM_ORDER_AGREEMENT
+  CUSTOM_ORDER_QUOTE
+  DELIVERY_REMINDER
+  ORDER_STATUS
+  PAYMENT_FAILED
+  PAYMENT_SUCCESS
+  PROMOTION
+  REVIEW_RESPONSE
+  SYSTEM
+}
+
+type Order {
+  adminNotes: String
+  createdAt: Timestamp!
+  deliveryAddressId: String
+  deliveryCity: String
+  deliveryDate: Timestamp
+  deliveryFee: Float!
+  deliveryPhone: String
+  deliveryRecipientName: String
+  deliverySlotId: String
+  deliveryState: String
+  deliveryStreet: String
+  deliveryTimeSlot: String
+  deliveryType: DeliveryType!
+  discount: Float!
+  id: ID!
+  items: [OrderItem!]!
+  notes: String
+  orderNumber: String!
+  paymentId: String
+  paymentReference: String
+  promoCode: String
+  promoCodeId: String
+  status: OrderStatus!
+  subtotal: Float!
+  total: Float!
+  updatedAt: Timestamp!
+  userId: ID!
+}
+
+input OrderFilterInput {
+  deliveryType: DeliveryType
+  fromDate: String
+  search: String
+  status: OrderStatus
+  toDate: String
+  userId: String
+}
+
+type OrderItem {
+  createdAt: Timestamp!
+  customisations: String
+  id: ID!
+  productId: ID!
+  productImageUrl: String
+  productName: String!
+  productSlug: String
+  quantity: Int!
+  specialInstructions: String
+  totalPrice: Float!
+  unitPrice: Float!
+  variantId: String
+  variantName: String
+}
+
+type OrderStats {
+  averageOrderValue: Float!
+  byStatus: [OrderStatusCount!]!
+  cancelledOrders: Int!
+  fulfilmentRate: Int!
+  totalOrders: Int!
+}
+
+"""Current status of a customer order"""
+enum OrderStatus {
+  """Order is in the oven"""
+  BAKING
+
+  """Order was cancelled"""
+  CANCELLED
+
+  """Order confirmed by admin"""
+  CONFIRMED
+
+  """Order successfully delivered"""
+  DELIVERED
+
+  """Order is on its way to the customer"""
+  OUT_FOR_DELIVERY
+
+  """Order placed but not yet confirmed"""
+  PENDING
+
+  """Order collected by customer"""
+  PICKED_UP
+
+  """Order is being prepared"""
+  PROCESSING
+
+  """Order is ready for pickup or delivery"""
+  READY
+
+  """Order was refunded"""
+  REFUNDED
+}
+
+type OrderStatusCount {
+  count: Int!
+  status: String!
+}
+
+type PaginatedAuditLogs {
+  data: [AuditLog!]!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedCustomOrders {
+  data: [CustomOrderRequest!]!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedInvites {
+  data: [StaffInvite!]!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedNotifications {
+  data: [Notification!]!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedOrders {
+  data: [Order!]!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedProducts {
+  data: [Product!]!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedReviews {
+  data: [Review!]!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedStaff {
+  data: [Staff!]!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+input PaginationInput {
+  limit: Int! = 20
+  page: Int! = 1
+}
+
+type Payment {
+  amount: Float!
+  channel: String
+  createdAt: Timestamp!
+  currency: String
+  failureReason: String
+  id: ID!
+  method: PaymentMethod
+  orderId: ID!
+  paidAt: Timestamp
+  paystackReference: String!
+  paystackTransactionId: String
+  status: PaymentStatus!
+  updatedAt: Timestamp!
+  userId: ID!
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  CARD
+  PAY_WITH_TRANSFER
+  USSD
+}
+
+"""Current status of a payment transaction"""
+enum PaymentStatus {
+  """Customer left before completing payment"""
+  ABANDONED
+
+  """Payment attempt failed"""
+  FAILED
+
+  """Payment initiated but not yet verified"""
+  PENDING
+
+  """Payment was refunded to the customer"""
+  REFUNDED
+
+  """Payment was reversed by the bank"""
+  REVERSED
+
+  """Payment verified and confirmed by Paystack"""
+  SUCCESS
+}
+
+type Product {
+  basePrice: Float!
+  category: Category
+  categoryId: String
+  createdAt: Timestamp!
+  customisationOptions: [CustomisationOption!]
+  description: String
+  id: ID!
+  isAvailable: Boolean!
+  isFeatured: Boolean!
+  media: [ProductMedia!]
+  metaDescription: String
+  metaTitle: String
+  name: String!
+  slug: String!
+  sortOrder: Float!
+  stockCount: Int!
+  updatedAt: Timestamp!
+  variants: [ProductVariant!]
+}
+
+input ProductFilterInput {
+  categoryId: ID
+  isAvailable: Boolean
+  isFeatured: Boolean
+  maxPrice: Float
+  minPrice: Float
+  search: String
+}
+
+type ProductMedia {
+  createdAt: Timestamp!
+  id: ID!
+  isPrimary: Boolean!
+  key: String!
+  sortOrder: Int!
+  type: String!
+  url: String!
+}
+
+type ProductRatingSummary {
+  average: Float!
+  breakdown: [RatingBreakdown!]!
+  total: Int!
+}
+
+type ProductVariant {
+  additionalPrice: Float!
+  createdAt: Timestamp!
+  id: ID!
+  isAvailable: Boolean!
+  name: String!
+  type: String!
+  updatedAt: Timestamp!
+}
+
+type PromoCode {
+  code: String!
+  createdAt: Timestamp!
+  createdBy: String
+  description: String
+  discountType: DiscountType!
+  discountValue: Float!
+  expiresAt: Timestamp
+  id: ID!
+  isActive: Boolean!
+  maximumDiscount: Float
+  minimumOrderValue: Float
+  perUserLimit: Int
+  startsAt: Timestamp
+  updatedAt: Timestamp!
+  usageCount: Int!
+  usageLimit: Int
+}
+
+type PromoUsage {
+  createdAt: Timestamp!
+  discountApplied: Float!
+  id: ID!
+  orderId: ID!
+  promoCodeId: ID!
+  userId: ID!
+}
+
+type PromoValidationResult {
+  discountAmount: Float!
+  finalTotal: Float!
+  promoCode: PromoCode!
+}
+
+type Query {
+  """Admin: get abandoned cart count"""
+  abandonedCarts: Int!
+
+  """Admin: get all custom order requests"""
+  allCustomOrders(pagination: PaginationInput, status: CustomOrderStatus): PaginatedCustomOrders!
+
+  """Admin: get all delivery slots including inactive"""
+  allDeliverySlots: [DeliverySlot!]!
+
+  """Admin: get all delivery zones including inactive"""
+  allDeliveryZones: [DeliveryZone!]!
+
+  """Admin: get all invites with pagination"""
+  allInvites(pagination: PaginationInput): PaginatedInvites!
+
+  """Admin: get all orders with filters"""
+  allOrders(filter: OrderFilterInput, pagination: PaginationInput): PaginatedOrders!
+
+  """Admin: get all reviews"""
+  allReviews(pagination: PaginationInput, status: ReviewStatus): PaginatedReviews!
+
+  """Admin: get all settings optionally filtered by group"""
+  allSettings(group: String): [Setting!]!
+
+  """Admin: get all staff members"""
+  allStaff(pagination: PaginationInput): PaginatedStaff!
+
+  """Admin: get audit logs"""
+  auditLogs(entity: String, pagination: PaginationInput, performedBy: String): PaginatedAuditLogs!
+
+  """Get all active categories"""
+  categories: [Category!]!
+
+  """Get a custom order request by ID"""
+  customOrder(id: ID!): CustomOrderRequest!
+
+  """Get agreement for a custom order"""
+  customOrderAgreement(requestId: ID!): CustomOrderAgreement
+
+  """Get payment for a custom order"""
+  customOrderPayment(requestId: ID!): CustomOrderPayment
+
+  """Get all quotes for a custom order request"""
+  customOrderQuotes(requestId: ID!): [CustomOrderQuote!]!
+
+  """Admin: get customer acquisition stats"""
+  customerStats(from: String!, to: String!): CustomerStats!
+
+  """Admin: get full dashboard summary"""
+  dashboardSummary(from: String!, to: String!): DashboardSummary!
+
+  """
+  Get available delivery slots, optionally filtered by day (MON, TUE, etc.)
+  """
+  deliverySlots(day: String): [DeliverySlot!]!
+
+  """Find delivery zone by area name"""
+  deliveryZoneByArea(area: String!): DeliveryZone
+
+  """Get all active delivery zones"""
+  deliveryZones: [DeliveryZone!]!
+
+  """Admin: get audit logs for a specific record"""
+  entityAuditLogs(entity: String!, entityId: ID!): [AuditLog!]!
+
+  """Get featured products"""
+  featuredProducts: [Product!]!
+
+  """Get the currently authenticated user"""
+  me: User!
+
+  """Get current user's saved addresses"""
+  myAddresses: [Address!]!
+
+  """Get current cart — pass sessionId for guest"""
+  myCart(sessionId: String): Cart!
+
+  """Get current user custom order requests"""
+  myCustomOrders(pagination: PaginationInput): PaginatedCustomOrders!
+
+  """Get current user notifications"""
+  myNotifications(pagination: PaginationInput): PaginatedNotifications!
+
+  """Get current user order history"""
+  myOrders(pagination: PaginationInput): PaginatedOrders!
+
+  """Get the current user's payment history"""
+  myPayments: [Payment!]!
+
+  """Get current user reviews"""
+  myReviews: [Review!]!
+
+  """Get unread notification count"""
+  notificationSummary: NotificationSummary!
+
+  """Get a single order by ID"""
+  order(id: ID!): Order!
+
+  """Get order by order number"""
+  orderByNumber(orderNumber: String!): Order!
+
+  """Admin: get order statistics for a date range"""
+  orderStats(from: String!, to: String!): OrderStats!
+
+  """Get the payment for a given order"""
+  paymentByOrder(orderId: ID!): Payment
+
+  """Admin: get all pending invites"""
+  pendingInvites: [StaffInvite!]!
+
+  """Simple health check ping"""
+  ping: String!
+
+  """Get a product by ID"""
+  product(id: ID!): Product!
+
+  """Get a product by slug"""
+  productBySlug(slug: String!): Product!
+
+  """Get rating summary for a product"""
+  productRatingSummary(productId: ID!): ProductRatingSummary!
+
+  """Get approved reviews for a product"""
+  productReviews(pagination: PaginationInput, productId: ID!): PaginatedReviews!
+
+  """Get all available products with filters"""
+  products(filter: ProductFilterInput, pagination: PaginationInput): PaginatedProducts!
+
+  """Admin: get a promo code by ID"""
+  promoCode(id: ID!): PromoCode!
+
+  """Admin: get all promo codes"""
+  promoCodes: [PromoCode!]!
+
+  """Admin: get usage history for a promo code"""
+  promoUsageHistory(promoCodeId: ID!): [PromoUsage!]!
+
+  """Get all public settings (for frontend config)"""
+  publicSettings: [Setting!]!
+
+  """
+  Admin: job counts for every Bull queue (order, payment, inventory, cart)
+  """
+  queueStats: QueueStatsResult!
+
+  """Admin: get revenue broken down by period (daily/weekly/monthly)"""
+  revenueByPeriod(from: String!, period: String!, to: String!): [RevenuePeriod!]!
+
+  """Admin: get revenue overview for a date range"""
+  revenueOverview(from: String!, to: String!): RevenueOverview!
+
+  """Admin: get a single setting by key"""
+  setting(key: String!): Setting!
+
+  """Admin: get a staff member by ID"""
+  staffMember(id: ID!): Staff!
+
+  """Admin: get top selling products"""
+  topProducts(from: String!, limit: Int! = 10, to: String!): [TopProduct!]!
+
+  """Validate an invite token and return invite details"""
+  validateInviteToken(token: String!): StaffInvite!
+
+  """Validate and preview a promo code discount"""
+  validatePromoCode(code: String!, deliveryFee: Float! = 0, orderSubtotal: Float!): PromoValidationResult!
+}
+
+type QueueJobCounts {
+  active: Int!
+  completed: Int!
+  delayed: Int!
+  failed: Int!
+  waiting: Int!
+}
+
+type QueueStatsResult {
+  cart: QueueJobCounts!
+  inventory: QueueJobCounts!
+  order: QueueJobCounts!
+  payment: QueueJobCounts!
+}
+
+enum QuoteResponse {
+  ACCEPT
+  NEGOTIATE
+  REJECT
+}
+
+enum QuoteStatus {
+  ACCEPTED
+  PENDING
+  REJECTED
+  SUPERSEDED
+}
+
+type RatingBreakdown {
+  count: Int!
+  star: Int!
+}
+
+input RespondToQuoteInput {
+  message: String
+  quoteId: ID!
+  response: QuoteResponse!
+}
+
+type RevenueOverview {
+  totalRevenue: Float!
+  totalTransactions: Int!
+}
+
+type RevenuePeriod {
+  period: String!
+  revenue: Float!
+  transactions: Int!
+}
+
+type Review {
+  adminResponse: String
+  comment: String
+  createdAt: Timestamp!
+  flagReason: String
+  id: ID!
+  isVerifiedPurchase: Boolean!
+  mediaKeys: [String!]!
+  mediaUrls: [String!]!
+  orderId: ID!
+  productId: ID!
+  rating: Int!
+  respondedAt: Timestamp
+  respondedBy: String
+  status: ReviewStatus!
+  updatedAt: Timestamp!
+  userId: ID!
+}
+
+"""Moderation status of a product review"""
+enum ReviewStatus {
+  APPROVED
+  FLAGGED
+  PENDING
+  REJECTED
+}
+
+type Setting {
+  createdAt: Timestamp!
+  description: String
+  group: String
+  id: ID!
+  isEditable: Boolean!
+  isSecret: Boolean!
+  key: String!
+  label: String
+  type: SettingType!
+  updatedAt: Timestamp!
+  updatedBy: String
+  value: String!
+}
+
+enum SettingType {
+  BOOLEAN
+  JSON
+  NUMBER
+  STRING
+}
+
+type Staff {
+  avatarUrl: String
+  createdAt: Timestamp!
+  department: String
+  email: String!
+  fullName: String!
+  id: ID!
+  invitedBy: String
+  isActive: Boolean!
+  lastActiveAt: Timestamp
+  phone: String
+  role: UserRole!
+  updatedAt: Timestamp!
+  userId: ID!
+}
+
+type StaffInvite {
+  acceptedAt: Timestamp
+  acceptedBy: String
+  createdAt: Timestamp!
+  department: String
+  email: String!
+  expiresAt: Timestamp!
+  fullName: String!
+  id: ID!
+  invitedBy: String!
+  role: UserRole!
+  status: InviteStatus!
+}
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+type TopProduct {
+  productId: String!
+  productName: String!
+  totalRevenue: Float!
+  totalSold: Int!
+}
+
+input UpdateOrderStatusInput {
+  adminNotes: String
+  orderId: ID!
+  status: OrderStatus!
+}
+
+input UpdateProductInput {
+  basePrice: Float
+  categoryId: String
+  description: String
+  id: ID!
+  isAvailable: Boolean
+  isFeatured: Boolean
+
+  """S3 object keys to add, in display order."""
+  mediaKeys: [String!]
+
+  """CDN URLs, parallel to mediaKeys (same index = same file)."""
+  mediaUrls: [String!]
+  metaDescription: String
+  metaTitle: String
+  name: String
+
+  """
+  If true, delete existing media before adding the new mediaKeys/mediaUrls.
+  """
+  replaceMedia: Boolean = false
+  stockCount: Int
+}
+
+input UpdateUserInput {
+  avatarUrl: String
+  fullName: String
+  phone: String
+}
+
+type User {
+  avatarUrl: String
+  createdAt: Timestamp!
+  email: String!
+  fullName: String!
+  googleId: String!
+  id: ID!
+  isActive: Boolean!
+  lastLoginAt: Timestamp
+  phone: String
+  role: UserRole!
+  updatedAt: Timestamp!
+}
+
+"""Role assigned to a user or staff member"""
+enum UserRole {
+  """Full access to all admin features"""
+  ADMIN
+
+  """Can view and update production queue"""
+  BAKER
+
+  """Regular customer using the shop"""
+  CUSTOMER
+
+  """Can view and update delivery status"""
+  DELIVERY
+
+  """Can manage orders and customers"""
+  SALES
+
+  """Read-only access to the dashboard"""
+  VIEWER
+}
