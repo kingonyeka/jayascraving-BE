@@ -81,7 +81,7 @@ export class OrdersService {
     // all (`discount` was hardcoded to 0 and PromotionsService was never
     // called from here).
     const savedOrder = await this.dataSource.transaction(async (manager) => {
-      let discount = 0;
+      let discount: number;
       let promoCodeId: string | undefined;
 
       const orderNumber = await this.generateOrderNumber();
