@@ -1,0 +1,1 @@
+{"version":3,"file":"queue-defaults.js","sourceRoot":"","sources":["../../../../src/modules/queues/jobs/queue-defaults.ts"],"names":[],"mappings":";;;AAUa,QAAA,aAAa,GAAG;IAC3B,iBAAiB,EAAE;QACjB,QAAQ,EAAE,CAAC;QACX,OAAO,EAAE,EAAE,IAAI,EAAE,aAAsB,EAAE,KAAK,EAAE,IAAI,EAAE;QACtD,gBAAgB,EAAE,IAAI;QACtB,YAAY,EAAE,KAAK;KACpB;CACF,CAAC"}

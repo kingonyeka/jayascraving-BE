@@ -1,0 +1,44 @@
+import { ConfigService } from '@nestjs/config';
+import { Repository, DataSource } from 'typeorm';
+import { HttpService } from '@nestjs/axios';
+import { Payment } from './entities/payment.entity';
+import { Order } from '../orders/entities/order.entity';
+import { User } from '../users/entities/user.entity';
+import { InitiatePaymentInput } from './dto/initiate-payment.input';
+import { PaystackWebhookDto } from './dto/paystack-webhook.dto';
+import { NotificationsService } from '../notifications/notifications.service';
+import { RealTimeAnalyticsService } from '../real-time-analytics/real-time-analytics.service';
+import { InAppNotificationsService } from '../in-app-notifications/in-app-notifications.service';
+import { PushNotificationsService } from '../push-notifications/push-notifications.service';
+import { QueuesService } from '../queues/queues.service';
+export declare class PaymentsService {
+    private readonly paymentRepo;
+    private readonly orderRepo;
+    private readonly userRepo;
+    private readonly configService;
+    private readonly httpService;
+    private readonly dataSource;
+    private readonly notificationsService;
+    private readonly realTimeAnalyticsService;
+    private readonly inAppNotificationsService;
+    private readonly pushNotificationsService;
+    private readonly queuesService;
+    private readonly logger;
+    private readonly paystackBaseUrl;
+    constructor(paymentRepo: Repository<Payment>, orderRepo: Repository<Order>, userRepo: Repository<User>, configService: ConfigService, httpService: HttpService, dataSource: DataSource, notificationsService: NotificationsService, realTimeAnalyticsService: RealTimeAnalyticsService, inAppNotificationsService: InAppNotificationsService, pushNotificationsService: PushNotificationsService, queuesService: QueuesService);
+    private get paystackSecret();
+    private get paystackHeaders();
+    initiatePayment(userId: string, userEmail: string, input: InitiatePaymentInput): Promise<{
+        authorizationUrl: string;
+        reference: string;
+        payment: Payment;
+    }>;
+    verifyPayment(reference: string): Promise<Payment>;
+    handleWebhook(rawBody: Buffer, payload: PaystackWebhookDto, signature: string): Promise<void>;
+    getPaymentByOrder(orderId: string): Promise<Payment | null>;
+    getPaymentsByUser(userId: string): Promise<Payment[]>;
+    private schedulePaymentVerifyFallback;
+    private initializePaystackTransaction;
+    private processPaystackResult;
+    private notifyPaymentSuccess;
+}

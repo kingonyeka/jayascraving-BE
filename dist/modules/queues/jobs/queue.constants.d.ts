@@ -1,0 +1,12 @@
+export declare const QUEUE_ORDER = "order";
+export declare const QUEUE_PAYMENT = "payment";
+export declare const QUEUE_INVENTORY = "inventory";
+export declare const QUEUE_ABANDONED_CART = "abandoned-cart";
+export declare const JOB_ORDER_AUTO_CANCEL = "order:auto-cancel";
+export declare const JOB_ORDER_DELIVERY_REMINDER = "order:delivery-reminder";
+export declare const JOB_PAYMENT_VERIFY = "payment:verify";
+export declare const JOB_PAYMENT_TIMEOUT = "payment:timeout";
+export declare const JOB_INVENTORY_LOW_STOCK_ALERT = "inventory:low-stock-alert";
+export declare const JOB_INVENTORY_STOCK_UPDATE = "inventory:stock-update";
+export declare const JOB_CART_SEND_RECOVERY = "cart:send-recovery-email";
+export declare const JOB_CART_CLEANUP = "cart:cleanup-expired";
