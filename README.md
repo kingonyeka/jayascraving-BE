@@ -102,9 +102,9 @@ npm run start:dev
 The server starts with hot reload. You should see:
 
 ```
-🚀 Server running on https://jaya-y1gr.onrender.com/api
-📊 GraphQL playground: https://jaya-y1gr.onrender.com/graphql
-❤️ Health check: https://jaya-y1gr.onrender.com/api/health
+🚀 Server running on http://localhost:3000/api
+📊 GraphQL playground: http://localhost:3000/graphql
+❤️ Health check: http://localhost:3000/api/health
 ```
 
 ### 4.6 Verify it works
